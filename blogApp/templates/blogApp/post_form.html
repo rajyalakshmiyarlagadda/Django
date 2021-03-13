@@ -1,0 +1,23 @@
+{% extends "blogApp/base.html" %}
+{% load crispy_forms_tags %}
+{% block content %}
+<div class="content-section">
+    <form method="POST">
+        {% csrf_token %}
+        <div class="form-row">
+            <div class="form-group row-md-5 col-md-5 mb-0">
+              {{ form.title|as_crispy_field }}
+            </div>
+        </div> 
+        <div class="form-row">
+            <div class="form-group row-md-5 col-md-5 mb-0">
+              {{ form.content|as_crispy_field }}
+            </div>
+        </div>    
+        <br/>
+        <button type="submit" class="btn btn-primary">{% if post %}Update Post{% else %}Post an article{% endif %}</button>
+    </form>
+</div>
+<!-- Medium Editor -->
+<script>var editor = new MediumEditor('.editable');</script>
+{% endblock %}

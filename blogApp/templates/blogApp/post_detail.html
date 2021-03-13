@@ -1,0 +1,57 @@
+{% extends "blogApp/base.html" %}
+{% load crispy_forms_tags %}
+{% block content %}
+<script>
+    $(document).ready(function(){
+        $('[data-toggle="popover"]').popover();   
+    });
+    </script>
+<style>
+    .popover-body {background-color:green;}
+</style>    
+
+<div class="content-section">
+
+    <!-- Author information -->
+    <div class="media">
+        <div class="media-body">
+            <h4 class="mt-0"><a href="{% url 'user_posts' object.author.username %}">{{ object.author }}</a></h4>
+            <h6 class="mt-0">{{ object.author.email }}</h6>
+        </div>
+    </div>
+    <hr>
+
+    <!-- Post information -->
+    <div>
+        <h1 class="mt-4">{{object.title}}</h1>
+        <p>
+            Posted on {{ object.date_posted|date:"F d, Y" }}
+            {% if object.author == user %}
+            <a class="btn btn-info btn-sm mt-1 mb-1 float-right" href="{% url 'post_update' object.id %}">Update</a>
+            <a class="btn btn-danger btn-sm mt-1 mb-1 float-right mr-2 "
+                href="{% url 'post_delete' object.id %}">Delete</a>
+            {% endif %}
+        </p>
+    </div>
+
+    <!-- Post Content -->
+    <p class="lead">{{ object.content}}</p>
+
+    
+    <!-- Like -->
+    {% if user.is_authenticated %}
+        <form action="{% url 'post_like' object.id %}" method="POST">
+            {% csrf_token %}
+
+            {% if post_is_liked %}
+                <button type="submit" name="post_id" value="{{object.id}}" class="btn btn-info">Unlike</button>
+            {% else %}
+                <button type="submit" name="post_id" value="{{object.id}}" class="btn btn-info">Like</button>
+            {% endif %}
+        </form>
+    {% else %}
+        <button type="button" class="btn btn-info" data-container="body" data-toggle="popover" data-placement="top" data-content="Please login to like a post">Like</button>
+    {% endif %}
+    <strong class="text-secondary">{{ number_of_likes }} Like{{ number_of_likes|pluralize }}</strong>
+    
+{% endblock content %}    
