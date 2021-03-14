@@ -1,5 +1,5 @@
 from django import forms
-from .models import Post
+from .models import Post, Comments
 
 class PostForm(forms.ModelForm):
     class Meta:
@@ -7,5 +7,8 @@ class PostForm(forms.ModelForm):
         fields = ['title', 'content']
         widgets = {
             'content': forms.Textarea(attrs={'class': 'editable medium-editor-textarea'}),
-            'content': forms.TextInput(attrs={'placeholder': 'Please write your valuable content here'})
         }
+
+
+
+

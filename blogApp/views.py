@@ -1,8 +1,9 @@
-from django.shortcuts import render
+from django.shortcuts import render, redirect
 from django.contrib.auth.models import User
 from django.shortcuts import get_object_or_404
 from .forms import PostForm
-from .models import Post
+from .models import Post, Comments
+from django.db.models import Q
 from django.http import HttpResponseRedirect
 from django.urls import reverse, reverse_lazy
 from django.views.generic import (
@@ -77,7 +78,34 @@ def PostLike(request, pk):
         post.likes.remove(request.user)
     else:
         post.likes.add(request.user)
-    return HttpResponseRedirect(reverse('post_detail', args=[str(pk)]))             
-    
+    return HttpResponseRedirect(reverse('post_detail', args=[str(pk)])) 
+
+
+def AddComment(request, pk):
+    post = get_object_or_404(Post, pk=pk)
+    print(post)
+    if request.method == 'POST':
+        user = get_object_or_404(User, id=request.POST.get('user_id'))
+        Comments(comments=request.POST.get('comment'), post=post, user=user).save()
+    else:
+        return HttpResponseRedirect(reverse('post_detail', args=[str(pk)]))     
+    return HttpResponseRedirect(reverse('post_detail', args=[str(pk)])) 
+
+class SearchView(ListView):
+    model = Post
+    template_name = 'blogApp/search.html'
+    context_object_name = 'search_results'
+
+    def get_queryset(self):
+        result = super(SearchView, self).get_queryset()
+        query = self.request.GET.get('search')
+        if query:
+            postresult = Post.objects.filter(Q(title__contains=query) | Q(content__contains=query))
+            result = postresult
+        else:
+            result = None
+        return result    
+
+
     
     

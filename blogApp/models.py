@@ -24,4 +24,10 @@ class Post(models.Model):
     def get_absolute_url(self):
         return reverse('post_detail', kwargs={'pk': self.pk})
 
+class Comments(models.Model):
+    post = models.ForeignKey(Post, on_delete=models.CASCADE, related_name='post_comments')
+    user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
+    comments = models.TextField()
+    date_posted = models.DateTimeField(default=timezone.now)
+
    

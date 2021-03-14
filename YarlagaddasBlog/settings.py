@@ -51,6 +51,7 @@ MIDDLEWARE = [
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
+    'django_session_timeout.middleware.SessionTimeoutMiddleware'
 ]
 
 ROOT_URLCONF = 'YarlagaddasBlog.urls'
@@ -124,11 +125,14 @@ USE_TZ = True
 
 STATIC_URL = '/static/'
 STATICFILES_DIRS = [ 'static' ]
+
 # Crispy settings
 CRISPY_TEMPLATE_PACK = 'bootstrap4'
 
-# Authentication Settings
-
+#Login Redirect
 LOGIN_REDIRECT_URL = 'index'
 LOGIN_URL = 'login'
 
+#Session
+#SESSION_EXPIRE_SECONDS = 5
+#SESSION_EXPIRE_AFTER_LAST_ACTIVITY = True
