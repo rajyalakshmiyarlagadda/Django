@@ -17,8 +17,8 @@ from django.views.generic import (
 # Create your views here.
 class PostCreateView(CreateView):
     model = Post
-    #form_class = PostForm
-    fields = ['title', 'content']
+    form_class = PostForm
+    #fields = ['title', 'content']
     success_url = '/'
 
     def form_valid(self, form):
