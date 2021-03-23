@@ -9,13 +9,14 @@
 </div>       
           
 {% for post in posts %}
-    <article class="content-section">
-        <div class="col-md-8">
+    <article class="media content-section">
+        <img class="rounded-circle article-img" src="{{ post.author.userimage.image.url }}">
+        <div class="media-body">
             <div class="article-mydata">
               <a class="mr-2" href="{% url 'user_posts' post.author.username %}">{{ post.author }}</a>
               <small>{{ post.date_posted|date:"F d, Y" }}</small>
             </div>
-        <h2><a class="article-title" href="{% url 'post_detail' post.pk %}">{{ post.title }}</a></h2>
+        <h3><a class="article-title" href="{% url 'post_detail' post.pk %}">{{ post.title }}</a></h3>
             <p class="article-content">{{ post.content }}</p>
         </div>
     </article>

@@ -14,6 +14,7 @@
 
     <!-- Author information -->
     <div class="media">
+        <img class="d-flex mr-3 rounded-circle article-img" src="{{ object.author.userimage.image.url }}" alt="">
         <div class="media-body">
             <h4 class="mt-0"><a href="{% url 'user_posts' object.author.username %}">{{ object.author }}</a></h4>
             <h6 class="mt-0">{{ object.author.email }}</h6>
@@ -54,4 +55,25 @@
     {% endif %}
     <strong class="text-secondary">{{ number_of_likes }} Like{{ number_of_likes|pluralize }}</strong>
     
+    <!-- Comment-->
+    {% if user.is_authenticated %}
+        <form action="{% url 'add_comment' object.id %}" method = 'POST'>
+            {% csrf_token %}
+            <input type='text' name = 'comment' id ='comment_id' />
+            <input type='hidden' name="user_id" value="{{user.id}}" />
+            <button type="submit" class="btn btn-info">Add Comment</button>
+        </form>
+    {% endif %}
+
+    <!-- Display comments-->
+    {% for comment in object.post_comments.all %}
+            <h5 class="mt-0"><a href="{% url 'user_posts' comment.user.username %}">{{ comment.user }}</a></h5>
+            {{ comment.comments}}
+            <hr>
+       
+    {% empty %}
+        <h4>No comments...</h4>    
+    {% endfor %}    
+      
+
 {% endblock content %}    

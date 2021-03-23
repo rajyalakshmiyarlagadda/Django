@@ -47,6 +47,7 @@
                         <a class="nav-item nav-link" href="{% url 'logout' %}">Logout</a>
                     {% else %}
                         <a class="nav-item nav-link" href="{% url 'login' %}">Login</a>
+                        <a class="nav-item nav-link" href="{% url 'signup' %}">SignUp</a>
                     {% endif %}
                 </div>
             </div>
@@ -55,7 +56,7 @@
     </header>
     <main role="main" class="container">
       <div class="row">
-        <div class="col-md-8">
+        <div class="col-md-10">
           {% block content %}{% endblock %}
         </div>
       </div>

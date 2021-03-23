@@ -22,7 +22,6 @@ class PostCreateView(CreateView):
     success_url = '/'
 
     def form_valid(self, form):
-        print (f'Inside the post create view form{self.request.user}')
         form.instance.author = self.request.user
         return super().form_valid(form)
 
@@ -30,14 +29,16 @@ class PostListView(ListView):
     model = Post
     template_name = 'blogApp/index.html'
     context_object_name = 'posts'
-    print('I am in list view')
 
 class PostDetailView(DetailView):
     model = Post
+    #query_pk_and_slug = True
+    slug_url_kwarg = 'the_slug'
+    slug_field = 'slug'
 
     def get_context_data(self, **kwargs):
         data = super().get_context_data(**kwargs)
-        likes_connected = get_object_or_404(Post, id=self.kwargs['pk'])
+        likes_connected = get_object_or_404(Post, slug=self.kwargs['the_slug'])
         liked = False
         if likes_connected.likes.filter(id=self.request.user.id).exists():
             liked = True
@@ -48,7 +49,9 @@ class PostDetailView(DetailView):
 class PostUpdateView(UpdateView):
     model = Post
     fields = ['title', 'content']
-    #success_url = '/post_detail'
+    #success_url = reverse('post_detail')
+    slug_url_kwarg = 'the_slug'
+    slug_field = 'slug'
 
     def form_valid(self, form):
         form.instance.author = self.request.user
@@ -58,6 +61,8 @@ class PostUpdateView(UpdateView):
 class PostDeleteView(DeleteView):
     model = Post
     success_url = '/'
+    slug_url_kwarg = 'the_slug'
+    slug_field = 'slug'
 
 def about(request):
     return render(request, 'blogApp/about.html', {'title': 'About'})  
@@ -68,28 +73,28 @@ class UserPostListView(ListView):
     context_object_name = 'posts'
 
     def get_queryset(self):
-        user = get_object_or_404(User, username=self.kwargs.get('username'))
-        print(user)
+        user = get_object_or_404(User, username=self.kwargs['username'])
+        print(user, self.kwargs, self.args)
         return Post.objects.filter(author=user).order_by('-date_posted') 
 
-def PostLike(request, pk):
+def PostLike(request, the_slug):
     post = get_object_or_404(Post, id=request.POST.get('post_id'))
     if post.likes.filter(id=request.user.id).exists():
         post.likes.remove(request.user)
     else:
         post.likes.add(request.user)
-    return HttpResponseRedirect(reverse('post_detail', args=[str(pk)])) 
+    return HttpResponseRedirect(reverse('post_detail', args=[str(the_slug)])) 
 
 
-def AddComment(request, pk):
-    post = get_object_or_404(Post, pk=pk)
+def AddComment(request, the_slug):
+    post = get_object_or_404(Post, slug=the_slug)
     print(post)
     if request.method == 'POST':
         user = get_object_or_404(User, id=request.POST.get('user_id'))
         Comments(comments=request.POST.get('comment'), post=post, user=user).save()
     else:
-        return HttpResponseRedirect(reverse('post_detail', args=[str(pk)]))     
-    return HttpResponseRedirect(reverse('post_detail', args=[str(pk)])) 
+        return HttpResponseRedirect(reverse('post_detail', args=[str(the_slug)]))     
+    return HttpResponseRedirect(reverse('post_detail', args=[str(the_slug)])) 
 
 class SearchView(ListView):
     model = Post
@@ -100,7 +105,7 @@ class SearchView(ListView):
         result = super(SearchView, self).get_queryset()
         query = self.request.GET.get('search')
         if query:
-            postresult = Post.objects.filter(Q(title__contains=query) | Q(content__contains=query))
+            postresult = Post.objects.filter(Q(title__contains=query) | Q(content__contains=query) | Q(author__username__icontains=query))
             result = postresult
         else:
             result = None

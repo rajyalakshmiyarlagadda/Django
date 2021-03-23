@@ -12,6 +12,7 @@ https://docs.djangoproject.com/en/3.1/ref/settings/
 
 from pathlib import Path
 import os
+from django.urls import reverse, reverse_lazy
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -132,7 +133,21 @@ CRISPY_TEMPLATE_PACK = 'bootstrap4'
 #Login Redirect
 LOGIN_REDIRECT_URL = 'index'
 LOGIN_URL = 'login'
+#LOGIN_URL = reverse_lazy('logout')
 
 #Session
 #SESSION_EXPIRE_SECONDS = 5
 #SESSION_EXPIRE_AFTER_LAST_ACTIVITY = True
+
+#Media files like images
+MEDIA_ROOT =  os.path.join(BASE_DIR, 'media') 
+MEDIA_URL = '/media/'
+
+
+# #Image resizeing
+# DJANGORESIZED_DEFAULT_SIZE = [1024, 768]
+# DJANGORESIZED_DEFAULT_QUALITY = 75
+# DJANGORESIZED_DEFAULT_KEEP_META = True
+# DJANGORESIZED_DEFAULT_FORCE_FORMAT = 'JPEG'
+# DJANGORESIZED_DEFAULT_FORMAT_EXTENSIONS = {'JPEG': ".jpg"}
+# DJANGORESIZED_DEFAULT_NORMALIZE_ROTATION = True
