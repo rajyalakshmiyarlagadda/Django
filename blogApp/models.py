@@ -2,6 +2,8 @@ from django.db import models
 from django.utils import timezone
 from django.conf import settings
 from django.urls import reverse
+from django.db.models.signals import pre_save
+from django.dispatch import receiver
 from django.utils.text import slugify
 
 # Create your models here.
@@ -26,18 +28,10 @@ class Post(models.Model):
     def get_absolute_url(self):
         return reverse('post_detail', kwargs={'the_slug': self.slug})
 
-    # def get_absolute_url(self):
-    #     kwargs = {
-    #         'pk': self.pk,
-    #         'slug': self.slug
-    #     }
-    #     return reverse('post_detail', kwargs=kwargs)
-
-    def save(self, *args, **kwargs):
-        value = self.title
-        self.slug = slugify(value, allow_unicode=True)
-        super().save(*args, **kwargs)
-
+@receiver(pre_save, sender=Post)
+def pre_save_slug(sender, instance, *args, **kwargs):
+    if not instance.slug: 
+        instance.slug = slugify(instance.title, allow_unicode=True)
 
 class Comments(models.Model):
     post = models.ForeignKey(Post, on_delete=models.CASCADE, related_name='post_comments')

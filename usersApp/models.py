@@ -23,19 +23,15 @@ class UserImage(models.Model):
             img.thumbnail(new_img)
             img.save(self.image.path)    
 
-#@receiver(post_save, sender=User)
-# def create_userimage(sender, instance, created, **kwargs):
-#     if created:
-#         UserImage.objects.create(user=instance)
-#         print('USer image created')
+# @receiver(post_save, sender=User)
+# def create_userimage(*args, **kwargs):
+#     print("I am in models signalas    ***********************",args,kwargs)
+    
+#     # if created:
+#     #     UserImage.objects.create(user=instance)
+#     #     print('USer image created')
 
-# post_save.connect(create_userimage, sender=User)
+# # post_save.connect(create_userimage, sender=User)
 
-# #@receiver(post_save, sender=User)
-# def update_userimage(sender, instance, created, **kwargs):
-#     if created == False:
-#         instance.userimage.save()
-#         print('userimage updates')   
-
-# post_save.connect(update_userimage, sender=User)          
+         
 

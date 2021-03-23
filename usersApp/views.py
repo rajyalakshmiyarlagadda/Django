@@ -15,13 +15,8 @@ def signUp(request):
         ui_form = UserImageForm(request.POST, request.FILES)
         print(ui_form)
         if ur_form.is_valid() and ui_form.is_valid():
-            ur_form.save()
-            print(ui_form.cleaned_data)
-            user_obj = User.objects.get(username=ur_form.cleaned_data.get('username'))
-            user_id = user_obj.id
-            print(user_id)
-            UserImage(user_id=user_id, image=ui_form.cleaned_data.get('image')).save()
-            #ui_form.save()
+            user_obj = ur_form.save()
+            UserImage(user_id=user_obj.id, image=ui_form.cleaned_data.get('image')).save()
             username = ur_form.cleaned_data.get('username')
             messages.success(
                 request, "Your account has been created! Your ar now able to login.")
