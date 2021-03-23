@@ -4,11 +4,10 @@ from django.contrib.auth.forms import UserCreationForm
 from .models import UserImage
 
 class UserRegisterForm(UserCreationForm):
-    email = forms.EmailField()
 
     class Meta:
         model = User
-        fields = ['username', 'email', 'password1', 'password2']
+        fields = ['first_name', 'last_name','username', 'email', 'password1', 'password2']
 
 class UserImageForm(forms.ModelForm):
 

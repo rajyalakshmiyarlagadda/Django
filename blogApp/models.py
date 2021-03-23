@@ -30,7 +30,6 @@ class Post(models.Model):
 
 @receiver(pre_save, sender=Post)
 def pre_save_slug(sender, instance, *args, **kwargs):
-    if not instance.slug: 
         instance.slug = slugify(instance.title, allow_unicode=True)
 
 class Comments(models.Model):

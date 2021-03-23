@@ -43,25 +43,6 @@ def signUp(request):
 #         logout(request)
 #         return redirect(reverse('login'))
 
-class LogoutView(RedirectView):
-    
-    template_name='usersApp/logout.html'
-
-    def get(self, request, **kwargs):
-
-        # If session expired django clean request.session object.
-        # If user came to this view by clicking to logout button request.session not comes empty 
-        print('My logout session is:', request.session, request.session.is_empty() )
-
-        if request.session.is_empty():
-            messages.error(request, "Your session has expired. Please login again to continue checking out.")
-
-        logout(request)
-
-        if request.GET.get('next'):
-            self.url = '{}?next={}'.format(self.url, request.GET.get('next'))
-
-        return super(LogoutView, self).get(request, **kwargs)
 
 
 

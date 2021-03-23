@@ -14,10 +14,9 @@ class UserImage(models.Model):
         return self.user.username
 
     def save(self, *args, **kwargs):
-        super(UserImage, self).save(*args, **kwargs)  # saving image first
-
-        img = Image.open(self.image.path) # Open image using self
-
+        super(UserImage, self).save(*args, **kwargs)  
+        img = Image.open(self.image.path)
+        
         if img.height > 100 or img.width > 100:
             new_img = (100, 100)
             img.thumbnail(new_img)
