@@ -28,9 +28,8 @@
         <p>
             Posted on {{ object.date_posted|date:"F d, Y" }}
             {% if object.author == user %}
-            <a class="btn btn-info btn-sm mt-1 mb-1 float-right" href="{% url 'post_update' object.id %}">Update</a>
-            <a class="btn btn-danger btn-sm mt-1 mb-1 float-right mr-2 "
-                href="{% url 'post_delete' object.id %}">Delete</a>
+            <a class="btn btn-info btn-sm mt-1 mb-1 float-right" href="{% url 'post_update' object.slug %}">Update</a>
+            <a class="btn btn-danger btn-sm mt-1 mb-1 float-right mr-2" href="{% url 'post_delete' object.slug %}">Delete</a>
             {% endif %}
         </p>
     </div>
@@ -41,7 +40,7 @@
     
     <!-- Like -->
     {% if user.is_authenticated %}
-        <form action="{% url 'post_like' object.id %}" method="POST">
+        <form action="{% url 'post_like' object.slug %}" method="POST">
             {% csrf_token %}
 
             {% if post_is_liked %}
@@ -57,7 +56,7 @@
     
     <!-- Comment-->
     {% if user.is_authenticated %}
-        <form action="{% url 'add_comment' object.id %}" method = 'POST'>
+        <form action="{% url 'add_comment' object.slug %}" method = 'POST'>
             {% csrf_token %}
             <input type='text' name = 'comment' id ='comment_id' />
             <input type='hidden' name="user_id" value="{{user.id}}" />
