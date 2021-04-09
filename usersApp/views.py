@@ -31,17 +31,11 @@ def signUp(request):
     }
     return render(request, 'usersApp/signup.html', context)
 
-# class LogoutView(View):
-#     print('request is *******************************')
-#     print('please print')
-#     template_name='usersApp/logout.html'
-    
-#     def get(self, request):
-#         print(request.session.is_empty())
-#         if request.session:
-#             messages.error(request, 'Session Expired Please Login Again')
-#         logout(request)
-#         return redirect(reverse('login'))
+
+
+
+
+
 
 
 
